@@ -30,8 +30,11 @@ fastify.post('/register', async (request, reply) => {
     console.log('Received registration request:', request.body);
 
     const hashedPassword = await bcrypt.hash(password, 10); 
+
+    // Split fullName into firstName and lastName
+    const [firstName, lastName] = fullName.split(' ');
    
-    const user = await models.User.create({ firstName: fullName, email, password: hashedPassword });
+    const user = await models.User.create({ firstName, lastName, email, password: hashedPassword });
     console.log('User created successfully:', user);
     reply.status(201).send(user);
   } catch (error) {
@@ -39,12 +42,12 @@ fastify.post('/register', async (request, reply) => {
   }
 });
 
+
 fastify.post('/login', async (request, reply) => {
   const { email, password } = request.body as any;
   try {
     const user :any = await models.User.findOne({ where: { email } });
     if (user && await bcrypt.compare(password, user.password)) {
-      // Revoke existing tokens for the user
       await models.Token.update({ state: 'revoked' }, { where: { userId: user.id } });
 
       const token = fastify.jwt.sign({ id: user.id });

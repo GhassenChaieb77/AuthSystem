@@ -15,6 +15,7 @@ exports.default = (sequelize) => {
         lastName: sequelize_1.DataTypes.STRING,
         email: sequelize_1.DataTypes.STRING,
         password: sequelize_1.DataTypes.STRING,
+        phoneNumber: sequelize_1.DataTypes.STRING,
     }, {
         sequelize,
         modelName: 'User',

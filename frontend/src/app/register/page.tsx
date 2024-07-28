@@ -43,7 +43,7 @@ const Register = () => {
           toast.error(`Sign-in failed! ${result.error}`);
         } else {
           toast.success("Sign-in successful!");
-          setTimeout(() => router.push("/hello-world"), 1500);
+          setTimeout(() => router.push("/hello-world"), 1500);  
         }
       } else {
         throw new Error("Unexpected response status");

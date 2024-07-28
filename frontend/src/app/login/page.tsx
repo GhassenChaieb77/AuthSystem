@@ -7,22 +7,30 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAuthStore } from '../store/useUserStore';
 import { getSession } from 'next-auth/react';
+import { Spinner } from 'react-bootstrap'; 
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const setToken = useAuthStore((state) => state.setToken);
 
- useEffect(() => {
-    if (session?.user) {
-      setToken(session.user.token);
-      console.log('User ID:', session.user.id);
-      console.log('User Email:', session.user.email);
-      router.push("/hello-world")
-    }
-  }, [session, setToken]);
+  useEffect(() => {
+    const checkSession = async () => {
+      if (status === 'loading') {
+        setLoading(true);
+      } else if (status === 'authenticated') {
+        setToken(session?.user?.token || '');
+        router.push('/hello-world');
+      } else {
+        setLoading(false);
+      }
+    };
+
+    checkSession();
+  }, [status, session, setToken, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,6 +63,16 @@ const Login = () => {
   const redirectToRegister = () => {
     router.push('/register');
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    ); // Render a loading spinner from react-bootstrap
+  }
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -126,4 +144,3 @@ const Login = () => {
 };
 
 export default Login;
-

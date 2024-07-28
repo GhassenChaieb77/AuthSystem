@@ -15,6 +15,9 @@ export default (sequelize: Sequelize): ModelCtor<Model> => {
     lastName: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
+    phoneNumber: DataTypes.STRING,
+
+    
   }, {
     sequelize,
     modelName: 'User',
