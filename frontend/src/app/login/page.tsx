@@ -1,12 +1,12 @@
 'use client';
-
 import { useState, useEffect } from 'react';
-import { signIn, useSession, getSession } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAuthStore } from '../store/useUserStore';
+import { getSession } from 'next-auth/react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -15,11 +15,12 @@ const Login = () => {
   const { data: session } = useSession();
   const setToken = useAuthStore((state) => state.setToken);
 
-  useEffect(() => {
+ useEffect(() => {
     if (session?.user) {
       setToken(session.user.token);
       console.log('User ID:', session.user.id);
       console.log('User Email:', session.user.email);
+      router.push("/hello-world")
     }
   }, [session, setToken]);
 
@@ -125,3 +126,4 @@ const Login = () => {
 };
 
 export default Login;
+

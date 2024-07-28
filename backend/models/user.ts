@@ -1,12 +1,11 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Sequelize, ModelCtor, ModelStatic } from 'sequelize';
 
-export default (sequelize) => {
+export default (sequelize: Sequelize): ModelCtor<Model> => {
   class User extends Model {
-    static associate(models) {
-      // define association here
+    static associate(models: { Token: ModelStatic<Model> }) {
       User.hasMany(models.Token, {
         foreignKey: 'userId',
-        as: 'tokens'
+        as: 'tokens',
       });
     }
   }
@@ -15,7 +14,7 @@ export default (sequelize) => {
     firstName: DataTypes.STRING,
     lastName: DataTypes.STRING,
     email: DataTypes.STRING,
-    password: DataTypes.STRING
+    password: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'User',

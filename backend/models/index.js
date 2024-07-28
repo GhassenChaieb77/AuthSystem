@@ -4,8 +4,8 @@ import { Sequelize, DataTypes } from 'sequelize';
 import { fileURLToPath } from 'url';
 import process from 'process';
 import config from '../config/config.json' assert { type: 'json' };
-import UserModel from './models/user.js';
-import TokenModel from './models/token.js';
+import UserModel from './user.js';
+import TokenModel from './token.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,7 +52,7 @@ const Token = TokenModel(sequelize);
 
 User.associate({ Token });
 Token.associate({ User });
-//sequelize.sync();
+sequelize.sync();
 
 export { User, Token };
 
